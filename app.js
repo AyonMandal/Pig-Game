@@ -10,6 +10,7 @@ GAME RULES:
 */
 
 
+
 //Initializing for new game
 var current_0=document.querySelector('#current-0');
 var current_1=document.querySelector('#current-1');
@@ -103,3 +104,105 @@ document.querySelector("#name-"+activePlayer).classList.add("player-name");
 document.querySelector("#name-"+activePlayer).textContent="PLAYER "+(activePlayer + 1);
 
 }
+
+/* Stores every DOM model */
+var current_0 = document.querySelector('#current-0');
+var current_1 = document.querySelector('#current-1');
+var player_0_score = document.querySelector('#score-0');
+var player_1_score = document.querySelector('#score-1');
+var Dice = document.querySelector(".dice");
+var Roll = document.querySelector(".btn-roll");
+var Hold = document.querySelector(".btn-hold");
+var newGame = document.querySelector(".btn-new");
+
+
+var scores, activePlayer, Sum = 0, gamePlay = true;
+init(); //resetting everything
+//clicking on ROll DIce
+
+Roll.addEventListener('click',function(){
+    //generating random number
+    if (gamePlay){
+        var Random = Math.floor((Math.random() * 6) + 1);
+    //if 1 then transfer the chance to second player
+    if (Random === 1) {
+        document.querySelector("#current-"+activePlayer).textContent = '0';
+        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0; 
+        Dice.style.display = 'block';
+        Dice.src = "dice-1.png";
+        Sum = 0;
+        document.querySelector(".player-0-panel").classList.toggle("active");
+        document.querySelector(".player-1-panel").classList.toggle("active");
+        
+        
+    }
+    else{
+        // displaying the correct dice
+    Dice.style.display = 'block';
+    Dice.src = "dice-"+Random+".png";
+    //add to current score
+    Sum += Random;
+    document.querySelector("#current-"+activePlayer).textContent = Sum;
+    }
+        
+    }
+    
+})
+
+// clicking on the HOLD button
+Hold.addEventListener('click',function(){
+    //reflect the score in main section
+    if (gamePlay){
+        var prev = parseInt(document.querySelector('#score-'+activePlayer).textContent);
+    Sum += prev;
+    document.querySelector('#score-'+activePlayer).textContent = Sum;
+     //declare winner
+    
+        if (Sum >= 10){
+        document.querySelector('#name-'+activePlayer).textContent = "WINNER!";
+        document.querySelector("#name-"+activePlayer).classList.add('winner','player-name');
+        current_0.textContent = '0';
+        current_1.textContent = '0';
+        Dice.style.display = 'none';
+        gamePlay = false;
+    }
+    else{
+        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0; 
+    document.querySelector(".player-0-panel").classList.toggle("active");
+    document.querySelector(".player-1-panel").classList.toggle("active");
+    current_0.textContent = '0';
+    current_1.textContent = '0';
+    Sum = 0;
+    }
+    }
+        
+   
+})
+
+//click on New Game
+
+newGame.addEventListener('click',init);
+
+//function init
+function init(){
+    // Intializing and resetting the app
+
+
+scores = [0,0];
+activePlayer = 0;
+
+/*resetting everything */
+
+current_0.textContent = '0';
+current_1.textContent = '0';
+player_0_score.textContent = '0';
+player_1_score.textContent = '0';
+Dice.style.display = 'none';
+document.querySelector("#name-"+activePlayer).classList.remove('winner','player-name');
+document.querySelector("#name-"+activePlayer).classList.add('player-name');
+document.querySelector('#name-'+activePlayer).textContent = "PLAYER "+(activePlayer + 1);
+
+}
+
+
+
